@@ -1,0 +1,13 @@
+# Reels na spracovanie — @the_tax_couple (vytiahnuté z profilu 2026-07-24)
+# Formát: jeden reel URL na riadok. Riadky s # sa ignorujú.
+# Tieto linky spracuje: py tools\run_from_urls.py the_tax_couple docs\reels-the_tax_couple.txt
+
+https://www.instagram.com/reel/DbJZAeItLP2/
+https://www.instagram.com/reel/DbDDp5FNRVW/
+https://www.instagram.com/reel/Da2jkSVtT2p/
+https://www.instagram.com/reel/DavW69jNW57/
+https://www.instagram.com/reel/Daexlu7gpPo/
+https://www.instagram.com/reel/DaZn_iLjygQ/
+https://www.instagram.com/reel/DaUXmRlEWzc/
+https://www.instagram.com/reel/DaPN6SXD-nc/
+https://www.instagram.com/reel/DaKERY3gtby/

@@ -5,3 +5,5 @@ __pycache__/
 downloads/
 *.mp4
 *.m4a
+
+beh.log
