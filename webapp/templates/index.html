@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reels Brain</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#181b22; --card2:#1e222b; --line:#2a2f3a;
+    --txt:#e6e8ec; --dim:#9aa3b2; --acc:#6ea8fe; --acc2:#4b7bec; --mark:#ffd666;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 18px 80px}
+  h1{font-size:26px;margin:0 0 2px;letter-spacing:-.3px}
+  .stats{color:var(--dim);font-size:14px;margin-bottom:22px}
+  .stats b{color:var(--txt)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+  .card h2{font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);margin:0 0 14px;font-weight:600}
+  input,select,textarea,button{font:inherit;color:var(--txt)}
+  input[type=text],select,textarea{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;outline:none}
+  input[type=text]:focus,textarea:focus,select:focus{border-color:var(--acc)}
+  textarea{resize:vertical;min-height:78px;font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:150px}
+  .btn{background:var(--acc2);border:none;border-radius:10px;padding:11px 20px;font-weight:600;cursor:pointer;flex:0 0 auto}
+  .btn:hover{background:var(--acc)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  label{display:block;font-size:12px;color:var(--dim);margin:0 0 5px}
+  .muted{color:var(--dim);font-size:13px}
+  .link{color:var(--acc);cursor:pointer;font-size:13px;background:none;border:none;padding:0;text-decoration:underline}
+  #urlbox{display:none;margin-top:12px}
+  #prog{margin-top:14px;font-size:13px;display:none}
+  .bar{height:7px;background:var(--card2);border-radius:6px;overflow:hidden;margin:8px 0}
+  .bar>span{display:block;height:100%;background:var(--acc2);width:0;transition:width .3s}
+  .log{max-height:150px;overflow:auto;font-size:12px;color:var(--dim);white-space:pre-wrap;margin-top:8px}
+
+  #searchbar{display:flex;gap:10px;align-items:center}
+  #q{font-size:17px;padding:14px 16px}
+  #niche{flex:0 0 200px}
+  .res{border-top:1px solid var(--line);padding:14px 2px}
+  .res:first-of-type{border-top:none}
+  .res .meta{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--dim);margin-bottom:5px;flex-wrap:wrap}
+  .tag{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+  .res .txt{font-size:14px}
+  .res mark{background:transparent;color:var(--mark);font-weight:700;padding:0}
+  .res .full{display:none;margin-top:8px;font-size:13px;color:#cdd2db;white-space:pre-wrap;background:var(--card2);border-radius:8px;padding:10px}
+  .empty{color:var(--dim);padding:20px 2px}
+  a.vid{color:var(--acc);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🧠 Reels Brain</h1>
+  <div class="stats" id="stats">načítavam…</div>
+
+  <div class="card">
+    <h2>Pridať profil</h2>
+    <div class="row">
+      <div style="flex:2"><label>Instagram username alebo URL</label><input type="text" id="username" placeholder="napr. the_tax_couple"></div>
+      <div style="flex:2"><label>Niche (priečinok)</label><input type="text" id="nicheIn" placeholder="napr. Daňové poradenstvo"></div>
+      <div style="flex:1"><label>Počet videí</label><input type="text" id="limit" value="40"></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+      <button class="btn" id="go">Spracovať</button>
+      <button class="link" id="toggleUrls">alebo vlož linky ručne ▾</button>
+    </div>
+    <div id="urlbox">
+      <label>Linky na reely (jeden na riadok) — použi keď Instagram nedovolí načítať zoznam</label>
+      <textarea id="urls" placeholder="https://www.instagram.com/reel/XXXXXX.../"></textarea>
+    </div>
+    <div id="prog">
+      <div id="progtxt"></div>
+      <div class="bar"><span id="progbar"></span></div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Hľadať v prepisoch</h2>
+    <div id="searchbar">
+      <input type="text" id="q" placeholder="napr. auto, dubai, trust, hypotéka…" autofocus>
+      <select id="niche"></select>
+    </div>
+    <div id="results"><div class="empty">Začni písať a nájdi scenáre naprieč všetkými profilmi.</div></div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => (s||"").replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const hl  = s => esc(s).replace(/\[\[/g,'<mark>').replace(/\]\]/g,'</mark>');
+
+async function loadStats(){
+  const d = await (await fetch('/api/stats')).json();
+  $('#stats').innerHTML = `<b>${d.stats.reels}</b> prepisov · <b>${d.stats.profily}</b> profilov · <b>${d.stats.niche}</b> niche`;
+  const sel = $('#niche');
+  sel.innerHTML = '<option value="">všetky niche</option>' +
+    d.niches.map(n=>`<option value="${esc(n.niche)}">${esc(n.niche)} (${n.n})</option>`).join('');
+}
+
+let t;
+async function doSearch(){
+  const q = $('#q').value, niche = $('#niche').value;
+  const r = await (await fetch(`/api/search?q=${encodeURIComponent(q)}&niche=${encodeURIComponent(niche)}`)).json();
+  const box = $('#results');
+  if(!r.length){ box.innerHTML = `<div class="empty">${q?'Nič sa nenašlo pre „'+esc(q)+'".':'Začni písať…'}</div>`; return; }
+  box.innerHTML = r.map((x,i)=>`
+    <div class="res">
+      <div class="meta">
+        <span class="tag">${esc(x.niche)}</span>
+        <a class="vid" href="${esc(x.url)}" target="_blank">@${esc(x.profile)}</a>
+        <span>${esc(x.date)}</span>
+        <span>❤ ${x.likes}</span>
+        <button class="link" onclick="document.getElementById('full${i}').style.display='block';this.style.display='none'">celý prepis</button>
+      </div>
+      <div class="txt">${hl(x.snippet)}</div>
+      <div class="full" id="full${i}">${esc(x.transcript)}</div>
+    </div>`).join('');
+}
+$('#q').addEventListener('input', ()=>{clearTimeout(t);t=setTimeout(doSearch,180)});
+$('#niche').addEventListener('change', doSearch);
+
+$('#toggleUrls').onclick = ()=>{ const b=$('#urlbox'); b.style.display = b.style.display==='block'?'none':'block'; };
+
+let poll;
+async function process(){
+  const body = {username:$('#username').value, niche:$('#nicheIn').value, limit:$('#limit').value, urls:$('#urls').value};
+  $('#go').disabled = true;
+  const r = await (await fetch('/api/process',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).json();
+  if(!r.ok){
+    $('#go').disabled=false;
+    alert(r.error);
+    if(r.needUrls) $('#urlbox').style.display='block';
+    return;
+  }
+  $('#prog').style.display='block';
+  poll = setInterval(async ()=>{
+    const j = await (await fetch('/api/progress')).json();
+    $('#progtxt').textContent = `@${j.profile} → ${j.niche}: ${j.done}/${j.total}`;
+    $('#progbar').style.width = (j.total? j.done/j.total*100:0)+'%';
+    $('#log').textContent = j.log.join('\n');
+    if(!j.running){ clearInterval(poll); $('#go').disabled=false; loadStats(); doSearch(); }
+  }, 1000);
+}
+$('#go').onclick = process;
+
+loadStats();
+</script>
+</body>
+</html>
