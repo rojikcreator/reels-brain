@@ -62,6 +62,8 @@ lajky: {rec['likes']}
 komentáre: {rec['comments']}
 ---
 
+🎬 **Video:** {rec['url']}
+
 {rec['transcript']}
 
 ## Popis pod videom

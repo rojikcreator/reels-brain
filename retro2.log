@@ -1,0 +1,12 @@
+﻿@retro_burgerpreshow -> Reštaurácia: 7 reels
+   (nahrávam whisper model large-v3-turbo — prvýkrát sa sťahuje, ~1.6 GB)
+1/7 OK You
+2/7 OK 
+3/7 OK 
+4/7 OK 
+5/7 FAIL C2fIt0yoGKF: yt-dlp: ERROR: [Instagram] C2fIt0yoGKF: This content isn't available to everyone: It can't be seen by certain audiences.
+
+6/7 FAIL C2crHFoIT6R: yt-dlp: ERROR: Postprocessing: WARNING: unable to obtain file audio codec with ffprobe
+
+7/7 OK 
+HOTOVO: 5/7 prepisov

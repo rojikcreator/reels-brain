@@ -109,7 +109,8 @@ async function doSearch(){
     <div class="res">
       <div class="meta">
         <span class="tag">${esc(x.niche)}</span>
-        <a class="vid" href="${esc(x.url)}" target="_blank">@${esc(x.profile)}</a>
+        <span>@${esc(x.profile)}</span>
+        <a class="vid" href="${esc(x.url)}" target="_blank">▶ pozrieť video</a>
         <span>${esc(x.date)}</span>
         <span>❤ ${x.likes}</span>
         <button class="link" onclick="document.getElementById('full${i}').style.display='block';this.style.display='none'">celý prepis</button>
