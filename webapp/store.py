@@ -95,6 +95,11 @@ def search(q: str, niche: str | None = None, limit: int = 100) -> list[dict]:
         return [dict(row) for row in c.execute(sql, params)]
 
 
+def exists(shortcode: str) -> bool:
+    with _conn() as c:
+        return c.execute("SELECT 1 FROM reels WHERE shortcode=?", (shortcode,)).fetchone() is not None
+
+
 def niches() -> list[dict]:
     with _conn() as c:
         return [dict(row) for row in c.execute(
