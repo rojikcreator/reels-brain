@@ -90,5 +90,23 @@ def api_progress():
     return jsonify(JOB)
 
 
+@app.route("/api/upload_meta", methods=["POST", "OPTIONS"])
+def api_upload_meta():
+    """Prijme JSON s metadátami (zber z prehliadača) a uloží do docs/. CORS + PNA povolené."""
+    resp_headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Private-Network": "true",
+    }
+    if request.method == "OPTIONS":
+        return ("", 204, resp_headers)
+    name = request.args.get("name", "upload")
+    safe = "".join(c for c in name if c.isalnum() or c in "-_")[:60] or "upload"
+    path = Path(__file__).resolve().parents[1] / "docs" / f"{safe}.json"
+    path.write_bytes(request.get_data())
+    return (jsonify({"ok": True, "bytes": path.stat().st_size, "file": str(path)}), 200, resp_headers)
+
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=False)
