@@ -7,7 +7,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_DIR / ".env")
 
 VAULT = Path(os.environ.get("VAULT_PATH", r"C:\Users\jakub\OneDrive\Počítač\Brain"))
-BRAIN_SUBDIR = "3-Zdroje/Reels Brain"
+BRAIN_SUBDIR = "02 RojikCreator/6 Reels Brain"
 
 IG_LOGIN = os.environ.get("IG_LOGIN", "")
 

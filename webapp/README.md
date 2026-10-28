@@ -19,7 +19,7 @@ Otvorí sa `http://localhost:5000`.
 
 ## Dáta
 
-- **Zdroj pravdy:** `.md` prepisy vo vaulte `3-Zdroje/Reels Brain/<niche>/<profil>/` — syncujú sa gitom, čitateľné v Obsidiane.
+- **Zdroj pravdy:** `.md` prepisy vo vaulte `02 RojikCreator/6 Reels Brain/<niche>/<profil>/` — syncujú sa gitom, čitateľné v Obsidiane.
 - **Index:** `reels.db` (SQLite FTS5) — lokálny, rebuildovateľný. `python webapp/store.py` ho postaví nanovo z vaultu (spúšťa sa aj pri štarte appky).
 
 ## Sync medzi PC a Mac

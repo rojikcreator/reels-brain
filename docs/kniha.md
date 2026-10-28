@@ -53,7 +53,7 @@ Platia pre KAŽDÚ kapitolu; každý subagent ich musí dostať v prompte spolu 
 - **Projekt:** `C:\Users\jakub\CODE CHAT\reels-brain` (git repo vznikne v kapitole 1). Windows 11, PowerShell.
 - **Python volaj cez `py`** (`py -m pip ...`, `py -m pytest ...`) — alias `python` môže byť Windows Store stub.
 - **Každé `open()`/`read_text()`/`write_text()` v Pythone MUSÍ mať `encoding="utf-8"`** — Windows default (cp1250) by rozbil diakritiku.
-- **Vault:** `C:\Users\jakub\OneDrive\Počítač\Brain` — Obsidian, PARA. Zapisuje sa VÝHRADNE do `3-Zdroje\Reels Brain\`. Nikdy nie do `0-Inbox\_import\`. Poznámky po slovensky, frontmatter `vytvorené: RRRR-MM-DD` + `tagy:`. Secrety (heslá, kľúče) do vaultu NEPATRIA.
+- **Vault:** `C:\Users\jakub\OneDrive\Počítač\Brain` — Obsidian. Zapisuje sa VÝHRADNE do `02 RojikCreator\6 Reels Brain\`. Nikdy nie do `09 Archív\`. Poznámky po slovensky, frontmatter `vytvorené: RRRR-MM-DD` + `tagy:`. Secrety (heslá, kľúče) do vaultu NEPATRIA.
 - **LLM volania výhradne cez `claude -p`** (Claude CLI, subscription). Žiadny `anthropic` SDK, žiadny API kľúč.
 - **Heslá zadáva výhradne Jakub.** `instaloader --login` je interaktívny krok pre neho — agent ho nikdy nespúšťa s heslom.
 - **ffmpeg 8.1.1 je už v PATH.** Python a pip k 2026-07-24 nainštalované NIE SÚ — rieši kapitola 1.
@@ -88,7 +88,7 @@ reels-brain/
 Výstup vo vaulte po behu:
 
 ```
-Brain/3-Zdroje/Reels Brain/
+Brain/02 RojikCreator/6 Reels Brain/
 ├── _LOG.md                                  # append-only log importov
 └── Finančný poradca/                        # priečinok = niche (určí Haiku)
     ├── _PLAYBOOK Finančný poradca.md        # destilát virálnych formúl niche
@@ -290,7 +290,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_DIR / ".env")
 
 VAULT = Path(os.environ.get("VAULT_PATH", r"C:\Users\jakub\OneDrive\Počítač\Brain"))
-BRAIN_SUBDIR = "3-Zdroje/Reels Brain"
+BRAIN_SUBDIR = "02 RojikCreator/6 Reels Brain"
 
 IG_LOGIN = os.environ.get("IG_LOGIN", "")
 
@@ -1161,7 +1161,7 @@ Očakávané poradie výpisu: 📡 metadáta → rebríček → 🧠 niche → 1
 - [ ] **Krok 4: Over vault**
 
 ```powershell
-Get-ChildItem -Recurse "C:\Users\jakub\OneDrive\Počítač\Brain\3-Zdroje\Reels Brain"
+Get-ChildItem -Recurse "C:\Users\jakub\OneDrive\Počítač\Brain\02 RojikCreator\6 Reels Brain"
 ```
 
 Skontroluj: priečinok niche má zmysluplný slovenský názov; v ňom `_PLAYBOOK <niche>.md` + priečinok profilu s ~10 poznámkami; existuje `_LOG.md`. Otvor jednu poznámku (Read) a over: frontmatter s `vytvorené/tagy/pozretia`, diakritika v poriadku (žiadne `Ã¡`), sekcie NÁZOV-less anatómia / Transcript / Popis, wikilink na playbook. Otvor playbook: má sekcie Hooky/Štruktúry/CTA/Chyby/Checklist.
@@ -1191,7 +1191,7 @@ git commit -m "test: E2E beh na realnom profile overeny"
 - Create: `C:\Users\jakub\.claude\skills\scenar\SKILL.md`
 
 **Interfaces:**
-- Consumes: vault `3-Zdroje\Reels Brain\` naplnený kapitolou 9.
+- Consumes: vault `02 RojikCreator\6 Reels Brain\` naplnený kapitolou 9.
 - Produces: globálny skill `/scenar` — píše nové Reels scenáre natrénované na playbookoch a rozboroch z vaultu, a učí sa z Jakubovho feedbacku.
 
 - [ ] **Krok 1: Zapíš `C:\Users\jakub\.claude\skills\scenar\SKILL.md`**
@@ -1208,7 +1208,7 @@ Píšeš scenáre pre krátke videá (Reels) natrénované na reálnych virálny
 
 ## Zdroj pravdy
 
-- Priečinok: `C:\Users\jakub\OneDrive\Počítač\Brain\3-Zdroje\Reels Brain\`
+- Priečinok: `C:\Users\jakub\OneDrive\Počítač\Brain\02 RojikCreator\6 Reels Brain\`
 - Každá niche má priečinok s `_PLAYBOOK <niche>.md` a podpriečinky profilov s rozbormi jednotlivých videí.
 
 ## Postup
@@ -1232,7 +1232,7 @@ Píšeš scenáre pre krátke videá (Reels) natrénované na reálnych virálny
 
 - Slovenčina, hovorová, žiadne korporátne frázy ani motivačný balast.
 - Hook max 8 slov. Scenár na 30–45 s ≈ 80–110 slov voiceoveru.
-- Zápis do vaultu len do `3-Zdroje\Reels Brain\`, vždy `encoding utf-8`.
+- Zápis do vaultu len do `02 RojikCreator\6 Reels Brain\`, vždy `encoding utf-8`.
 ```
 
 - [ ] **Krok 2: Over, že skill funguje**
