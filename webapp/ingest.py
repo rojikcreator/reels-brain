@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import store  # noqa: E402
 from reels_brain.config import BRAIN_SUBDIR, DOWNLOADS, VAULT  # noqa: E402
 from reels_brain.transcriber import transcribe  # noqa: E402
+from reels_brain.index import rebuild_index  # noqa: E402
 from reels_brain.vault import sanitize, slug  # noqa: E402
 
 YTDLP = [sys.executable, "-m", "yt_dlp"]
@@ -78,6 +79,7 @@ def _write_note(rec: dict) -> None:
     words = rec["transcript"].split()
     title = sanitize(" ".join(words[:6])) if words else rec["shortcode"]
     (folder / f"{rec['date']} {title}.md").write_text(_note_md(rec), encoding="utf-8")
+    rebuild_index()
 
 
 def ingest_one(url: str, handle: str, niche: str, keep_media: bool = False) -> dict:

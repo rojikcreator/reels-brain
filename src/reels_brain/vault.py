@@ -89,4 +89,6 @@ def write_run(niche: str, handle: str, reels: list[Reel], playbook_md: str) -> P
         written.append(fname)
     _playbook_path(niche).write_text(playbook_note(niche, playbook_md), encoding="utf-8")
     _append_log(niche, handle, written)
+    from .index import rebuild_index
+    rebuild_index()
     return folder
